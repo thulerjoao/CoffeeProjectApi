@@ -17,6 +17,7 @@ async function bootstrap() {
     .setTitle('Coffee App')
     .setDescription('API responsabel for the Coffee Application')
     .setVersion('1.0.0')
+    .addTag('product')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
