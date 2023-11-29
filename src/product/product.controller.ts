@@ -29,7 +29,7 @@ export class ProductController {
   @ApiOperation({
     summary: 'Get product by id',
   })
-  getById(id: string) {
+  getById(@Param('id') id: string) {
     return this.productService.findById(id);
   }
 
@@ -45,7 +45,7 @@ export class ProductController {
   @ApiOperation({
     summary: 'Delete product by id',
   })
-  delete(id: string) {
+  delete(@Param('id') id: string) {
     return this.productService.delete(id);
   }
 

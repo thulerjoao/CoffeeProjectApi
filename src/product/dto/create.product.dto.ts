@@ -27,7 +27,6 @@ export class CreateProductDto {
   description: string;
 
   @IsString()
-  @IsUrl()
   @ApiProperty({
     description: 'Type',
     example: 'Tradicional',

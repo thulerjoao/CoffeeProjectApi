@@ -21,6 +21,7 @@ model Product {
   id          String  @id @default(uuid())
   image       String?
   title       String
+  type        String?
   description String
   price       Float
   // type        Type    @relation(fields: [typeName], references: [id])
@@ -39,8 +40,8 @@ model User {
 }
 
 model Cart {
-  id        String   @id @default(uuid())
-  
+  id String @id @default(uuid())
+
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 }
