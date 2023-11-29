@@ -17,10 +17,14 @@ async function bootstrap() {
     .setTitle('Coffee App')
     .setDescription('API responsabel for the Coffee Application')
     .setVersion('1.0.0')
+    .addTag('status')
     .addTag('product')
+    .addTag('user')
+    .addTag('type')
+    .addTag('cart')
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('docs', app, document);
+  SwaggerModule.setup('api', app, document);
 
   await app.listen(3333);
 }
