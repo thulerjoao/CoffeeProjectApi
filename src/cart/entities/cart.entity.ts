@@ -1,13 +1,12 @@
-class CartProduct {
-  productId: string;
-  size: number;
-  amount: number;
-}
+// class CartProduct {
+//   productId: string;
+//   size: number;
+//   amount: number;
+// }
 
 export class Cart {
   id?: string;
-  userId: string;
-  products: CartProduct[];
+  products: string;
   createdAt?: Date;
   updatedAt?: Date;
 }

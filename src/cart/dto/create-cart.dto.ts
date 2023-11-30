@@ -1,15 +1,7 @@
-import { IsNumber, IsPositive } from 'class-validator';
+import { IsPositive, IsString } from 'class-validator';
 
 export class CreateCartDto {
-  @IsNumber()
+  @IsString()
   @IsPositive()
-  userId: string;
-
-  @IsNumber()
-  @IsPositive()
-  productId: string;
-
-  @IsNumber()
-  @IsPositive()
-  size: number;
+  products: string;
 }

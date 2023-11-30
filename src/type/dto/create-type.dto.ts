@@ -8,5 +8,5 @@ export class CreateTypeDto {
     description: 'Product type',
     example: 'Tradicional',
   })
-  type: string;
+  name: string;
 }

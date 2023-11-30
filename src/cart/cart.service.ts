@@ -1,29 +1,42 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { Cart } from './entities/cart.entity';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateCartDto } from './dto/create-cart.dto';
 import { UpdateCartDto } from './dto/update-cart.dto';
-import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class CartService {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(createCartDto: CreateCartDto) {
-    return 'This action adds a new cart';
-  }
-
   findAll() {
-    return `This action returns all cart`;
+    return this.prisma.cart.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} cart`;
+  async findById(id: string): Promise<Cart> {
+    const data = await this.prisma.cart.findUnique({ where: { id } });
+    if (!data) {
+      throw new BadRequestException(`Unavailable ID`);
+    }
+    return data;
   }
 
-  update(id: number, updateCartDto: UpdateCartDto) {
-    return `This action updates a #${id} cart`;
+  async create(dto: CreateCartDto): Promise<Cart> {
+    const data: Cart = { ...dto };
+    await this.prisma.cart.create({ data }).catch();
+    return data;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} cart`;
+  async delete(id: string): Promise<void> {
+    await this.findById(id);
+    await this.prisma.cart.delete({ where: { id } }).catch();
+  }
+
+  async update(id: string, dto: UpdateCartDto): Promise<Cart> {
+    const data: Partial<Cart> = { ...dto };
+    await this.findById(id);
+    return this.prisma.cart.update({
+      where: { id },
+      data,
+    });
   }
 }

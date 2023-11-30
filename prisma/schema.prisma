@@ -35,13 +35,14 @@ model User {
   name      String
   email     String
   password  String
+  cartId    String?
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 }
 
 model Cart {
-  id String @id @default(uuid())
-
+  id        String   @id @default(uuid())
+  products  String?
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 }

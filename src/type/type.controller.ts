@@ -1,44 +1,60 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
 } from '@nestjs/common';
-import { TypeService } from './type.service';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
+
 import { CreateTypeDto } from './dto/create-type.dto';
 import { UpdateTypeDto } from './dto/update-type.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { TypeService } from './type.service';
 
-@ApiTags(`type`)
+@ApiTags('type')
 @Controller('type')
 export class TypeController {
   constructor(private readonly typeService: TypeService) {}
 
-  @Post()
-  create(@Body() createTypeDto: CreateTypeDto) {
-    return this.typeService.create(createTypeDto);
-  }
-
   @Get()
-  findAll() {
+  @ApiOperation({
+    summary: 'Get all types',
+  })
+  getAll() {
     return this.typeService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.typeService.findOne(+id);
+  @ApiOperation({
+    summary: 'Get type by id',
+  })
+  getById(@Param('id') id: string) {
+    return this.typeService.findById(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTypeDto: UpdateTypeDto) {
-    return this.typeService.update(+id, updateTypeDto);
+  @Post()
+  @ApiOperation({
+    summary: 'Create new type',
+  })
+  create(@Body() dto: CreateTypeDto) {
+    return this.typeService.create(dto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.typeService.remove(+id);
+  @ApiOperation({
+    summary: 'Delete type by id',
+  })
+  delete(@Param('id') id: string) {
+    return this.typeService.delete(id);
+  }
+
+  @Patch(':id')
+  @ApiOperation({
+    summary: 'Updating type by id',
+  })
+  update(@Param('id') id: string, @Body() dto: UpdateTypeDto) {
+    return this.typeService.update(id, dto);
   }
 }

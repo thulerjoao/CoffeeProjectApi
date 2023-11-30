@@ -1,28 +1,42 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { User } from './entities/user.entity';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
-  }
 
   findAll() {
-    return `This action returns all user`;
+    return this.prisma.user.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findById(id: string): Promise<User> {
+    const data = await this.prisma.user.findUnique({ where: { id } });
+    if (!data) {
+      throw new BadRequestException(`Unavailable ID`);
+    }
+    return data;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async create(dto: CreateUserDto): Promise<User> {
+    const data: User = { ...dto };
+    await this.prisma.user.create({ data }).catch();
+    return data;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async delete(id: string): Promise<void> {
+    await this.findById(id);
+    await this.prisma.user.delete({ where: { id } }).catch();
+  }
+
+  async update(id: string, dto: UpdateUserDto): Promise<User> {
+    const data: Partial<User> = { ...dto };
+    await this.findById(id);
+    return this.prisma.user.update({
+      where: { id },
+      data,
+    });
   }
 }
