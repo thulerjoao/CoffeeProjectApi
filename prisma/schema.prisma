@@ -12,7 +12,7 @@ datasource db {
 
 model Type {
   id        String   @id @default(uuid())
-  name      String
+  name      String   @unique
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 }
@@ -20,7 +20,7 @@ model Type {
 model Product {
   id          String  @id @default(uuid())
   image       String?
-  title       String
+  title       String  @unique
   type        String?
   description String
   price       Float
