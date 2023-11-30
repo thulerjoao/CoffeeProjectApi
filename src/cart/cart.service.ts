@@ -3,6 +3,7 @@ import { Cart } from './entities/cart.entity';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateCartDto } from './dto/create-cart.dto';
 import { UpdateCartDto } from './dto/update-cart.dto';
+import { handleError } from 'src/utils/handleError';
 
 @Injectable()
 export class CartService {
@@ -22,13 +23,13 @@ export class CartService {
 
   async create(dto: CreateCartDto): Promise<Cart> {
     const data: Cart = { ...dto };
-    await this.prisma.cart.create({ data }).catch();
+    await this.prisma.cart.create({ data }).catch(handleError);
     return data;
   }
 
   async delete(id: string): Promise<void> {
     await this.findById(id);
-    await this.prisma.cart.delete({ where: { id } }).catch();
+    await this.prisma.cart.delete({ where: { id } }).catch(handleError);
   }
 
   async update(id: string, dto: UpdateCartDto): Promise<Cart> {

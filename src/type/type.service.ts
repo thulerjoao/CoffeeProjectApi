@@ -3,6 +3,7 @@ import { Type } from './entities/type.entity';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateTypeDto } from './dto/create-type.dto';
 import { UpdateTypeDto } from './dto/update-type.dto';
+import { handleError } from 'src/utils/handleError';
 
 @Injectable()
 export class TypeService {
@@ -22,13 +23,13 @@ export class TypeService {
 
   async create(dto: CreateTypeDto): Promise<Type> {
     const data: Type = { ...dto };
-    await this.prisma.type.create({ data }).catch();
+    await this.prisma.type.create({ data }).catch(handleError);
     return data;
   }
 
   async delete(id: string): Promise<void> {
     await this.findById(id);
-    await this.prisma.type.delete({ where: { id } }).catch();
+    await this.prisma.type.delete({ where: { id } }).catch(handleError);
   }
 
   async update(id: string, dto: UpdateTypeDto): Promise<Type> {

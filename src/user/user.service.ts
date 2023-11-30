@@ -3,6 +3,7 @@ import { User } from './entities/user.entity';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { handleError } from 'src/utils/handleError';
 
 @Injectable()
 export class UserService {
@@ -22,13 +23,13 @@ export class UserService {
 
   async create(dto: CreateUserDto): Promise<User> {
     const data: User = { ...dto };
-    await this.prisma.user.create({ data }).catch();
+    await this.prisma.user.create({ data }).catch(handleError);
     return data;
   }
 
   async delete(id: string): Promise<void> {
     await this.findById(id);
-    await this.prisma.user.delete({ where: { id } }).catch();
+    await this.prisma.user.delete({ where: { id } }).catch(handleError);
   }
 
   async update(id: string, dto: UpdateUserDto): Promise<User> {
