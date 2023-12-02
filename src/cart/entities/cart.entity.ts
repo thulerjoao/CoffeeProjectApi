@@ -6,7 +6,7 @@
 
 export class Cart {
   id?: string;
-  products: string;
+  products?: string;
   createdAt?: Date;
   updatedAt?: Date;
 }

@@ -28,6 +28,8 @@ model Product {
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
+
+  productCart  ProductCart?
 }
 
 model User {
@@ -35,14 +37,27 @@ model User {
   name      String
   email     String
   password  String
-  cartId    String?
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
+
+  cart Cart?
 }
 
 model Cart {
   id        String   @id @default(uuid())
   products  String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique
+}
+
+model ProductCart {
+  id String @id @default(uuid())
+  product   Product   @relation(fields: [productId], references: [id])
+  productId String @unique
+  size      Int
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 }
