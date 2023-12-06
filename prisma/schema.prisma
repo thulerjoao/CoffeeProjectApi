@@ -11,10 +11,13 @@ datasource db {
 }
 
 model Type {
-  id        String   @id @default(uuid())
-  name      String   @unique
+  id   String @id @default(uuid())
+  name String @unique
+
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("type")
 }
 
 model Product {
@@ -24,40 +27,50 @@ model Product {
   type        String?
   description String
   price       Float
-  // type        Type    @relation(fields: [typeName], references: [id])
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  productCart  ProductCart?
+  @@map("product")
 }
 
 model User {
-  id        String   @id @default(uuid())
-  name      String
-  email     String
-  password  String
+  id       String @id @default(uuid())
+  name     String
+  email    String
+  password String
+
+  cart   Cart?   @relation(fields: [cartId], references: [id])
+  cartId String? @unique
+
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  // cart Cart?
+  @@map("user")
 }
 
 model Cart {
-  id        String   @id @default(uuid())
-  products  String?
+  id       String  @id @default(uuid())
+  totalPrice Float?
+
+  user      User?
+  productCart ProductCart[]
+  
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  // user   User   @relation(fields: [userId], references: [id])
-  // userId String @unique
+  @@map("cart")
 }
 
 model ProductCart {
-  id String @id @default(uuid())
-  product   Product   @relation(fields: [productId], references: [id])
-  productId String @unique
-  size      Int
+  id   String @id @default(uuid())
+  size Int
+  amount Int
+
+  cart Cart[]
+
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("product_cart")
 }
