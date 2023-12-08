@@ -1,12 +1,9 @@
-// class CartProduct {
-//   productId: string;
-//   size: number;
-//   amount: number;
-// }
+import { ProductCart } from 'src/product-cart/entities/product-cart.entity';
 
 export class Cart {
   id?: string;
-  products?: string;
+  products?: ProductCart[];
+  totalValue?: number;
   createdAt?: Date;
   updatedAt?: Date;
 }
