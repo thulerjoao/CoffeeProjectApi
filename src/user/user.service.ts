@@ -1,10 +1,11 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { User } from './entities/user.entity';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { handleError } from 'src/utils/handleError';
+import { User } from './entities/user.entity';
+// import { UpdateUserDto } from './dto/update-user.dto';
+import { Prisma } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
+import { handleError } from 'src/utils/handleError';
 
 @Injectable()
 export class UserService {
@@ -15,6 +16,21 @@ export class UserService {
     password: false,
     createdAt: true,
     updatedAt: true,
+  };
+
+  private userSelectWithCart = {
+    id: true,
+    name: true,
+    email: true,
+    password: false,
+    createdAt: true,
+    updatedAt: true,
+    cart: {
+      select: {
+        totalPrice: true,
+        productCart: true,
+      },
+    },
   };
 
   constructor(private readonly prisma: PrismaService) {}
@@ -41,12 +57,24 @@ export class UserService {
       throw new BadRequestException(`Passwords do not march`);
     }
     delete dto.confirmPassword;
-    const data: User = {
-      ...dto,
+    // const data: User = {
+    //   ...dto,
+    //   password: await bcrypt.hash(dto.password, 10),
+    // };
+    const EmptyCart = {};
+    const data: Prisma.UserCreateInput = {
+      name: dto.name,
+      email: dto.email,
       password: await bcrypt.hash(dto.password, 10),
+      cart: {
+        create: EmptyCart,
+      },
     };
     return this.prisma.user
-      .create({ data, select: this.userSelect })
+      .create({
+        data,
+        select: this.userSelect,
+      })
       .catch(handleError);
   }
 
@@ -55,13 +83,13 @@ export class UserService {
     await this.prisma.user.delete({ where: { id } }).catch(handleError);
   }
 
-  async update(id: string, dto: UpdateUserDto): Promise<User> {
-    const data: Partial<User> = { ...dto };
-    await this.findById(id);
-    return this.prisma.user.update({
-      where: { id },
-      data,
-      select: this.userSelect,
-    });
-  }
+  // async update(id: string, dto: UpdateUserDto): Promise<User> {
+  //   const data: Partial<User> = { ...dto };
+  //   await this.findById(id);
+  //   return this.prisma.user.update({
+  //     where: { id },
+  //     data,
+  //     select: this.userSelect,
+  //   });
+  // }
 }
