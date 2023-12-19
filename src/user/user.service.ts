@@ -81,8 +81,10 @@ export class UserService {
   }
 
   async delete(id: string): Promise<void> {
-    await this.findById(id);
+    const user = await this.findById(id);
+    const cartId = user.cart.id;
     await this.prisma.user.delete({ where: { id } }).catch(handleError);
+    await this.prisma.cart.delete({ where: { id: cartId } }).catch(handleError);
   }
 
   // async update(id: string, dto: UpdateUserDto): Promise<User> {
