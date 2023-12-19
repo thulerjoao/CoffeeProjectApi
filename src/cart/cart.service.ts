@@ -9,12 +9,28 @@ import { handleError } from 'src/utils/handleError';
 export class CartService {
   constructor(private readonly prisma: PrismaService) {}
 
+  private cartSelect = {
+    id: true,
+    productCart: true,
+    totalValue: true,
+    user: {
+      select: {
+        id: true,
+      },
+    },
+    createdAt: true,
+    updatedAt: true,
+  };
+
   findAll() {
     return this.prisma.cart.findMany();
   }
 
   async findById(id: string): Promise<Cart> {
-    const data = await this.prisma.cart.findUnique({ where: { id } });
+    const data = await this.prisma.cart.findUnique({
+      where: { id },
+      select: this.cartSelect,
+    });
     if (!data) {
       throw new BadRequestException(`Unavailable ID`);
     }
@@ -22,7 +38,7 @@ export class CartService {
   }
 
   async create(dto: CreateCartDto): Promise<Cart> {
-    const data: Cart = { ...dto };
+    const data: Cart = { ...dto, totalValue: 0 };
     await this.prisma.cart.create({ data }).catch(handleError);
     return data;
   }

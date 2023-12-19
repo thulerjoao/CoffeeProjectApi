@@ -27,7 +27,8 @@ export class UserService {
     updatedAt: true,
     cart: {
       select: {
-        totalPrice: true,
+        id: true,
+        totalValue: true,
         productCart: true,
       },
     },
@@ -44,7 +45,7 @@ export class UserService {
   async findById(id: string): Promise<User> {
     const data = await this.prisma.user.findUnique({
       where: { id },
-      select: this.userSelect,
+      select: this.userSelectWithCart,
     });
     if (!data) {
       throw new BadRequestException(`Unavailable ID`);
@@ -61,19 +62,20 @@ export class UserService {
     //   ...dto,
     //   password: await bcrypt.hash(dto.password, 10),
     // };
-    const EmptyCart = {};
+    const newCart = { totalValue: 0 };
+    // const newCart = {};
     const data: Prisma.UserCreateInput = {
       name: dto.name,
       email: dto.email,
       password: await bcrypt.hash(dto.password, 10),
       cart: {
-        create: EmptyCart,
+        create: newCart,
       },
     };
     return this.prisma.user
       .create({
         data,
-        select: this.userSelect,
+        select: this.userSelectWithCart,
       })
       .catch(handleError);
   }
