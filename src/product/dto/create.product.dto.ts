@@ -29,9 +29,9 @@ export class CreateProductDto {
   @IsString()
   @ApiProperty({
     description: 'Type',
-    example: 'Tradicional',
+    example: '599c92e9-e914-4f86-a000-02adc246121e',
   })
-  type: string;
+  typeId: string;
 
   @IsNumber()
   @IsNotEmpty()

@@ -23,8 +23,7 @@ export class TypeService {
 
   async create(dto: CreateTypeDto): Promise<Type> {
     const data: Type = { ...dto };
-    await this.prisma.type.create({ data }).catch(handleError);
-    return data;
+    return this.prisma.type.create({ data }).catch(handleError);
   }
 
   async delete(id: string): Promise<void> {
