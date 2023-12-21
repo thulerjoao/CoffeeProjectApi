@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
-// import { UpdateUserDto } from './dto/update-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { Prisma } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { handleError } from 'src/utils/handleError';
@@ -58,10 +58,6 @@ export class UserService {
       throw new BadRequestException(`Passwords do not march`);
     }
     delete dto.confirmPassword;
-    // const data: User = {
-    //   ...dto,
-    //   password: await bcrypt.hash(dto.password, 10),
-    // };
     const newCart = { totalValue: 0 };
     // const newCart = {};
     const data: Prisma.UserCreateInput = {
@@ -87,13 +83,17 @@ export class UserService {
     await this.prisma.cart.delete({ where: { id: cartId } }).catch(handleError);
   }
 
-  // async update(id: string, dto: UpdateUserDto): Promise<User> {
-  //   const data: Partial<User> = { ...dto };
-  //   await this.findById(id);
-  //   return this.prisma.user.update({
-  //     where: { id },
-  //     data,
-  //     select: this.userSelect,
-  //   });
-  // }
+  async update(id: string, dto: UpdateUserDto): Promise<User> {
+    const data: Partial<Prisma.UserCreateInput> = {
+      name: dto.name,
+      email: dto.email,
+      password: await bcrypt.hash(dto.password, 10),
+    };
+    await this.findById(id);
+    return this.prisma.user.update({
+      where: { id },
+      data,
+      select: this.userSelect,
+    });
+  }
 }
