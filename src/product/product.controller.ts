@@ -4,13 +4,13 @@ import {
   Delete,
   Get,
   Param,
-  // Patch,
+  Patch,
   Post,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create.product.dto';
-// import { UpdateProductDto } from './dto/updates.product.dto';
+import { UpdateProductDto } from './dto/updates.product.dto';
 
 @ApiTags('product')
 @Controller('product')
@@ -49,11 +49,11 @@ export class ProductController {
     return this.productService.delete(id);
   }
 
-  // @Patch(':id')
-  // @ApiOperation({
-  //   summary: 'Updating product by id',
-  // })
-  // update(@Param('id') id: string, @Body() dto: UpdateProductDto) {
-  //   return this.productService.update(id, dto);
-  // }
+  @Patch(':id')
+  @ApiOperation({
+    summary: 'Updating product by id',
+  })
+  update(@Param('id') id: string, @Body() dto: UpdateProductDto) {
+    return this.productService.update(id, dto);
+  }
 }
