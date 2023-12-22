@@ -1,3 +1,4 @@
+import { Cart } from 'src/cart/entities/cart.entity';
 import { Product } from 'src/product/entities/product.entity';
 
 export class ProductCart {
@@ -5,6 +6,7 @@ export class ProductCart {
   size: number;
   amount: number;
   product?: Product;
+  cart?: Cart;
   createdAt?: Date;
   updatedAt?: Date;
 }

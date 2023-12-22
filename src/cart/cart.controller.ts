@@ -1,15 +1,6 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
-  Post,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CartService } from './cart.service';
-import { CreateCartDto } from './dto/create-cart.dto';
 import { UpdateCartDto } from './dto/update-cart.dto';
 
 @ApiTags('cart')
@@ -31,14 +22,6 @@ export class CartController {
   })
   getById(@Param('id') id: string) {
     return this.cartService.findById(id);
-  }
-
-  @Post()
-  @ApiOperation({
-    summary: 'Create new cart',
-  })
-  create(@Body() dto: CreateCartDto) {
-    return this.cartService.create(dto);
   }
 
   @Delete(':id')

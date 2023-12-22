@@ -17,11 +17,19 @@ export class CreateProductCartDto {
     example: 1,
   })
   amount: number;
-}
 
-// id?: string;
-// size: string;
-// amount: string;
-// product: Product;
-// createdAt?: Date;
-// updatedAt?: Date;
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({
+    description: 'product id',
+    example: '4b3fbbcf-dc17-4474-89f8-289175dc399a',
+  })
+  productId: string;
+
+  @IsString()
+  @ApiProperty({
+    description: 'cart id',
+    example: 'f358bca8-5b9a-4191-83fe-bbe13b586429',
+  })
+  cartId: string;
+}

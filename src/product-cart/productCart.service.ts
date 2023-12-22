@@ -4,6 +4,7 @@ import { handleError } from 'src/utils/handleError';
 import { CreateProductCartDto } from './dto/create.productCart.dto';
 import { UpdateProductCartDto } from './dto/update.productCart.dto';
 import { ProductCart } from './entities/product-cart.entity';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class ProductCartService {
@@ -22,9 +23,21 @@ export class ProductCartService {
   }
 
   async create(dto: CreateProductCartDto): Promise<ProductCart> {
-    const data: ProductCart = { ...dto };
-    await this.prisma.productCart.create({ data }).catch(handleError);
-    return data;
+    const data: Prisma.ProductCartCreateInput = {
+      amount: dto.amount,
+      size: dto.size,
+      product: {
+        connect: {
+          id: dto.productId,
+        },
+      },
+      cart: {
+        connect: {
+          id: dto.cartId,
+        },
+      },
+    };
+    return this.prisma.productCart.create({ data }).catch(handleError);
   }
 
   async delete(id: string): Promise<void> {
@@ -33,7 +46,20 @@ export class ProductCartService {
   }
 
   async update(id: string, dto: UpdateProductCartDto): Promise<ProductCart> {
-    const data: Partial<ProductCart> = { ...dto };
+    const data: Prisma.ProductCartCreateInput = {
+      amount: dto.amount,
+      size: dto.size,
+      product: {
+        connect: {
+          id: dto.productId,
+        },
+      },
+      cart: {
+        connect: {
+          id: id,
+        },
+      },
+    };
     await this.findById(id);
     return this.prisma.productCart.update({
       where: { id },

@@ -1,9 +1,9 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { Cart } from './entities/cart.entity';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateCartDto } from './dto/create-cart.dto';
-import { UpdateCartDto } from './dto/update-cart.dto';
 import { handleError } from 'src/utils/handleError';
+import { UpdateCartDto } from './dto/update-cart.dto';
+import { Cart } from './entities/cart.entity';
 
 @Injectable()
 export class CartService {
@@ -37,19 +37,24 @@ export class CartService {
     return data;
   }
 
-  async create(dto: CreateCartDto): Promise<Cart> {
-    const data: Cart = { ...dto, totalValue: 0 };
-    await this.prisma.cart.create({ data }).catch(handleError);
-    return data;
-  }
-
   async delete(id: string): Promise<void> {
     await this.findById(id);
     await this.prisma.cart.delete({ where: { id } }).catch(handleError);
   }
 
   async update(id: string, dto: UpdateCartDto): Promise<Cart> {
-    const data: Partial<Cart> = { ...dto };
+    const data: Partial<Prisma.CartCreateInput> = {
+      products: {
+        createMany: {
+          data: dto.products.map((element) => ({
+            size: element.size,
+            amount: element.amount,
+            productId: element.productId,
+          })),
+        },
+      },
+      totalValue: dto.totalValue,
+    };
     await this.findById(id);
     return this.prisma.cart.update({
       where: { id },
@@ -57,3 +62,13 @@ export class CartService {
     });
   }
 }
+
+// const data: Prisma.CartCreateInput = {
+//   ...dto,
+//   totalValue: 0,
+//   products: {
+//     createMany: {
+//       data:
+//     }
+//   }
+// }

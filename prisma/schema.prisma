@@ -22,22 +22,6 @@ model Type {
   @@map("type")
 }
 
-model Product {
-  id          String  @id @default(uuid())
-  image       String?
-  title       String  @unique
-  description String
-  price       Float
-
-  type   Type?   @relation(fields: [typeId], references: [id])
-  typeId String? @unique @map("type_id")
-
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  @@map("product")
-}
-
 model User {
   id       String @id @default(uuid())
   name     String
@@ -54,27 +38,47 @@ model User {
 }
 
 model Cart {
-  id       String  @id @default(uuid())
+  id         String @id @default(uuid())
   totalValue Float?
 
-  user      User?
-  productCart ProductCart[]
-  
+  user     User?
+  products ProductCart[]
+
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("cart")
 }
 
-model ProductCart {
-  id   String @id @default(uuid())
-  size Int
-  amount Int
+model Product {
+  id          String  @id @default(uuid())
+  image       String?
+  title       String  @unique
+  description String
+  price       Float
 
-  cart Cart[]
+  cart ProductCart[]
+
+  type   Type?   @relation(fields: [typeId], references: [id])
+  typeId String? @unique @map("type_id")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
+  @@map("product")
+}
+
+model ProductCart {
+  id     String @id @default(uuid())
+  size   Int
+  amount Int
+
+  cart      Cart    @relation(fields: [cartId], references: [id])
+  cartId    String
+
+  product   Product @relation(fields: [productId], references: [id])
+  productId String
+
+  // @@unique([cartId, productId]) // => metodo n repitir produtos
   @@map("product_cart")
 }

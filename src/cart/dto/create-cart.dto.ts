@@ -1,13 +1,18 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber, IsPositive } from 'class-validator';
-import { ProductCart } from 'src/product-cart/entities/product-cart.entity';
+import { Type } from 'class-transformer';
+import { IsNumber, IsPositive, ValidateNested } from 'class-validator';
+import { CreateProductCartDto } from 'src/product-cart/dto/create.productCart.dto';
 
 export class CreateCartDto {
+  @ValidateNested({
+    each: true,
+  })
+  @Type(() => CreateProductCartDto)
   @ApiProperty({
     description: 'list of products',
-    example: [],
+    type: [CreateProductCartDto],
   })
-  products: ProductCart[];
+  products: CreateProductCartDto[];
 
   @IsNumber()
   @IsPositive()
