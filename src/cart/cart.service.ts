@@ -11,7 +11,7 @@ export class CartService {
 
   private cartSelect = {
     id: true,
-    productCart: true,
+    products: true,
     totalValue: true,
     user: {
       select: {
