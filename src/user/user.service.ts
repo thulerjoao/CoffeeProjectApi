@@ -29,7 +29,7 @@ export class UserService {
       select: {
         id: true,
         totalValue: true,
-        productCart: true,
+        products: true,
       },
     },
   };
