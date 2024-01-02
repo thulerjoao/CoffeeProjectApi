@@ -29,10 +29,10 @@ export class AuthController {
 
   @Get()
   @UseGuards(AuthGuard())
+  @ApiBearerAuth()
   @ApiOperation({
     summary: 'Return auth user',
   })
-  @ApiBearerAuth()
   profile() {
     return {
       message: 'Successful auth',

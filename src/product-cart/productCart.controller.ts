@@ -6,13 +6,17 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateProductCartDto } from './dto/create.productCart.dto';
 import { UpdateProductCartDto } from './dto/update.productCart.dto';
 import { ProductCartService } from './productCart.service';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('productCart')
+@UseGuards(AuthGuard())
+@ApiBearerAuth()
 @Controller('productCart')
 export class ProductCartController {
   constructor(private readonly productCartService: ProductCartService) {}

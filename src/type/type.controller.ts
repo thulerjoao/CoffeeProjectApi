@@ -6,14 +6,18 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { CreateTypeDto } from './dto/create-type.dto';
 import { UpdateTypeDto } from './dto/update-type.dto';
 import { TypeService } from './type.service';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('type')
+@UseGuards(AuthGuard())
+@ApiBearerAuth()
 @Controller('type')
 export class TypeController {
   constructor(private readonly typeService: TypeService) {}
