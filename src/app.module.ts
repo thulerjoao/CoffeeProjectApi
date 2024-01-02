@@ -7,9 +7,18 @@ import { TypeModule } from './type/type.module';
 import { CartModule } from './cart/cart.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { ProductCartModule } from './product-cart/productCart.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [ProductModule, UserModule, TypeModule, CartModule, PrismaModule, ProductCartModule],
+  imports: [
+    ProductModule,
+    UserModule,
+    TypeModule,
+    CartModule,
+    PrismaModule,
+    ProductCartModule,
+    AuthModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

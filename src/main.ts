@@ -18,10 +18,13 @@ async function bootstrap() {
     .setDescription('API responsabel for the Coffee Application')
     .setVersion('1.0.0')
     .addTag('status')
-    .addTag('product')
+    .addTag('auth')
     .addTag('user')
-    .addTag('type')
     .addTag('cart')
+    .addTag('type')
+    .addTag('product')
+    .addTag('productCart')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
