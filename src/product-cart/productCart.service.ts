@@ -46,19 +46,19 @@ export class ProductCartService {
   }
 
   async update(id: string, dto: UpdateProductCartDto): Promise<ProductCart> {
-    const data: Prisma.ProductCartCreateInput = {
+    const data: Partial<Prisma.ProductCartUpdateInput> = {
       amount: dto.amount,
       size: dto.size,
-      product: {
-        connect: {
-          id: dto.productId,
-        },
-      },
-      cart: {
-        connect: {
-          id: id,
-        },
-      },
+      // product: {
+      //   connect: {
+      //     id: dto.productId,
+      //   },
+      // },
+      // cart: {
+      //   connect: {
+      //     id: id,
+      //   },
+      // },
     };
     await this.findById(id);
     return this.prisma.productCart.update({
