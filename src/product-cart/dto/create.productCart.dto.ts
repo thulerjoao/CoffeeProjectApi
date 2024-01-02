@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, IsUrl } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreateProductCartDto {
-  @IsString()
+  @IsNumber()
   @IsNotEmpty()
   @ApiProperty({
     description: 'size chosed',
@@ -10,8 +10,8 @@ export class CreateProductCartDto {
   })
   size: number;
 
-  @IsString()
-  @IsUrl()
+  @IsNotEmpty()
+  @IsNumber()
   @ApiProperty({
     description: 'amount of the same product',
     example: 1,
@@ -27,6 +27,7 @@ export class CreateProductCartDto {
   productId: string;
 
   @IsString()
+  @IsNotEmpty()
   @ApiProperty({
     description: 'cart id',
     example: 'f358bca8-5b9a-4191-83fe-bbe13b586429',
