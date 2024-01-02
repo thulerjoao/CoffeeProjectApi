@@ -12,6 +12,8 @@ import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { LoginResponseDto } from './dto/login-response.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { LoggedUser } from './logged-user.decorator';
+import { User } from 'src/user/entities/user.entity';
 
 @Controller('auth')
 @ApiTags('auth')
@@ -33,9 +35,9 @@ export class AuthController {
   @ApiOperation({
     summary: 'Return auth user',
   })
-  profile() {
+  profile(@LoggedUser() user: User) {
     return {
-      message: 'Successful auth',
+      message: user,
     };
   }
 }
