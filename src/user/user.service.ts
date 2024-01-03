@@ -27,7 +27,6 @@ export class UserService {
     updatedAt: false,
     cart: {
       select: {
-        id: true,
         totalValue: true,
         products: {
           select: {
