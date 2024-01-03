@@ -8,11 +8,12 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { LoggedUser } from 'src/auth/logged-user.decorator';
 import { CreateProductCartDto } from './dto/create.productCart.dto';
 import { UpdateProductCartDto } from './dto/update.productCart.dto';
 import { ProductCartService } from './productCart.service';
-import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('productCart')
 @UseGuards(AuthGuard())
@@ -25,8 +26,9 @@ export class ProductCartController {
   @ApiOperation({
     summary: 'Get all productCarts',
   })
-  getAll() {
-    return this.productCartService.findAll();
+  getAll(@LoggedUser() user) {
+    const cartId = user.cartId;
+    return this.productCartService.findAll(cartId);
   }
 
   @Get(':id')
@@ -41,8 +43,9 @@ export class ProductCartController {
   @ApiOperation({
     summary: 'Create new productCart',
   })
-  create(@Body() dto: CreateProductCartDto) {
-    return this.productCartService.create(dto);
+  create(@LoggedUser() user, @Body() dto: CreateProductCartDto) {
+    const cartId = user.cartId;
+    return this.productCartService.create(cartId, dto);
   }
 
   @Delete(':id')

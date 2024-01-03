@@ -8,10 +8,20 @@ import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class ProductCartService {
+  private productCartSelect = {
+    id: true,
+    size: true,
+    amount: true,
+    productId: true,
+  };
+
   constructor(private readonly prisma: PrismaService) {}
 
-  findAll() {
-    return this.prisma.productCart.findMany();
+  findAll(cartId: string) {
+    return this.prisma.productCart.findMany({
+      where: { cartId },
+      select: this.productCartSelect,
+    });
   }
 
   async findById(id: string): Promise<ProductCart> {
@@ -22,7 +32,10 @@ export class ProductCartService {
     return data;
   }
 
-  async create(dto: CreateProductCartDto): Promise<ProductCart> {
+  async create(
+    cartId: string,
+    dto: CreateProductCartDto,
+  ): Promise<ProductCart> {
     const data: Prisma.ProductCartCreateInput = {
       amount: dto.amount,
       size: dto.size,
@@ -33,7 +46,7 @@ export class ProductCartService {
       },
       cart: {
         connect: {
-          id: dto.cartId,
+          id: cartId,
         },
       },
     };
@@ -46,19 +59,9 @@ export class ProductCartService {
   }
 
   async update(id: string, dto: UpdateProductCartDto): Promise<ProductCart> {
-    const data: Partial<Prisma.ProductCartUpdateInput> = {
+    const data: Partial<UpdateProductCartDto> = {
       amount: dto.amount,
       size: dto.size,
-      // product: {
-      //   connect: {
-      //     id: dto.productId,
-      //   },
-      // },
-      // cart: {
-      //   connect: {
-      //     id: id,
-      //   },
-      // },
     };
     await this.findById(id);
     return this.prisma.productCart.update({

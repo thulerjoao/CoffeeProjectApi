@@ -14,8 +14,8 @@ export class UserService {
     name: true,
     email: true,
     password: false,
-    createdAt: true,
-    updatedAt: true,
+    createdAt: false,
+    updatedAt: false,
   };
 
   private userSelectWithCart = {
@@ -23,13 +23,20 @@ export class UserService {
     name: true,
     email: true,
     password: false,
-    createdAt: true,
-    updatedAt: true,
+    createdAt: false,
+    updatedAt: false,
     cart: {
       select: {
         id: true,
         totalValue: true,
-        products: true,
+        products: {
+          select: {
+            id: true,
+            size: true,
+            amount: true,
+            productId: true,
+          },
+        },
       },
     },
   };

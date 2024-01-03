@@ -26,11 +26,11 @@ export class CreateProductCartDto {
   })
   productId: string;
 
-  @IsString()
-  @IsNotEmpty()
-  @ApiProperty({
-    description: 'cart id',
-    example: 'f358bca8-5b9a-4191-83fe-bbe13b586429',
-  })
-  cartId: string;
+  // @IsString()
+  // @IsNotEmpty()
+  // @ApiProperty({
+  //   description: 'cart id',
+  //   example: 'f358bca8-5b9a-4191-83fe-bbe13b586429',
+  // })
+  // cartId: string;
 }
