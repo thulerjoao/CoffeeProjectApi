@@ -12,9 +12,34 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
+  private authUser = {
+    id: true,
+    name: true,
+    email: true,
+    password: true,
+    createdAt: false,
+    updatedAt: false,
+    cart: {
+      select: {
+        totalValue: true,
+        products: {
+          select: {
+            id: true,
+            size: true,
+            amount: true,
+            productId: true,
+          },
+        },
+      },
+    },
+  };
+
   async login(loginDto: LoginDto): Promise<LoginResponseDto> {
     const { password, email } = loginDto;
-    const user = await this.prisma.user.findUnique({ where: { email } });
+    const user = await this.prisma.user.findUnique({
+      where: { email },
+      select: this.authUser,
+    });
 
     if (!user) {
       throw new UnauthorizedException('User or password invalid');
