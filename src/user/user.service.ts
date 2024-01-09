@@ -48,6 +48,16 @@ export class UserService {
     });
   }
 
+  async findOne(id: string): Promise<User> {
+    const data = await this.prisma.user.findUnique({
+      where: { id },
+    });
+    if (!data) {
+      throw new BadRequestException(`Unavailable ID`);
+    }
+    return data;
+  }
+
   async findById(id: string): Promise<User> {
     const data = await this.prisma.user.findUnique({
       where: { id },
@@ -83,8 +93,8 @@ export class UserService {
   }
 
   async delete(id: string): Promise<void> {
-    const user = await this.findById(id);
-    const cartId = user.cart.id;
+    const user = await this.findOne(id);
+    const cartId = user.cartId;
     await this.prisma.user.delete({ where: { id } }).catch(handleError);
     await this.prisma.cart.delete({ where: { id: cartId } }).catch(handleError);
   }

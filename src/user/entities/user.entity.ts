@@ -6,6 +6,7 @@ export class User {
   email: string;
   password: string;
   cart?: Cart;
+  cartId?: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
