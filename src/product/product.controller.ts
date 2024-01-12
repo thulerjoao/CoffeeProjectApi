@@ -15,7 +15,6 @@ import { UpdateProductDto } from './dto/updates.product.dto';
 import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('product')
-@ApiBearerAuth()
 @Controller('product')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
@@ -37,6 +36,7 @@ export class ProductController {
   }
 
   @Post()
+  @ApiBearerAuth()
   @UseGuards(AuthGuard())
   @ApiOperation({
     summary: 'Create new product',
@@ -46,6 +46,7 @@ export class ProductController {
   }
 
   @Delete(':id')
+  @ApiBearerAuth()
   @UseGuards(AuthGuard())
   @ApiOperation({
     summary: 'Delete product by id',
@@ -55,6 +56,7 @@ export class ProductController {
   }
 
   @Patch(':id')
+  @ApiBearerAuth()
   @UseGuards(AuthGuard())
   @ApiOperation({
     summary: 'Updating product by id',
