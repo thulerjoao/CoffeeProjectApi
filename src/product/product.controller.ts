@@ -6,13 +6,23 @@ import {
   Param,
   Patch,
   Post,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { ProductService } from './product.service';
+import { AuthGuard } from '@nestjs/passport';
+import { FileInterceptor } from '@nestjs/platform-express';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
+import { ProductImageResponse } from 'src/utils/globalTypes';
 import { CreateProductDto } from './dto/create.product.dto';
 import { UpdateProductDto } from './dto/updates.product.dto';
-import { AuthGuard } from '@nestjs/passport';
+import { ProductService } from './product.service';
 
 @ApiTags('product')
 @Controller('product')
@@ -63,5 +73,33 @@ export class ProductController {
   })
   update(@Param('id') id: string, @Body() dto: UpdateProductDto) {
     return this.productService.update(id, dto);
+  }
+
+  @Post('product-picture')
+  @ApiOperation({
+    summary: 'insert product image',
+  })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        imageUrl: {
+          type: 'string',
+          format: 'url',
+        },
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  @UseInterceptors(FileInterceptor('file', { limits: { fileSize: 5000000 } }))
+  async insertProductImage(
+    @Body('imageUrl') imageUrl: string,
+    @UploadedFile() file: Express.Multer.File,
+  ): Promise<ProductImageResponse> {
+    return await this.productService.insertProductPicture(imageUrl, file);
   }
 }

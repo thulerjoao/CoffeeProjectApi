@@ -52,7 +52,7 @@ model Cart {
 
 model Product {
   id          String  @id @default(uuid())
-  image       String?
+  image       String? @map("image_url")
   title       String  @unique
   description String
   price       Float

@@ -5,6 +5,11 @@ import { CreateProductDto } from './dto/create.product.dto';
 import { UpdateProductDto } from './dto/updates.product.dto';
 import { handleError } from 'src/utils/handleError';
 import { Prisma } from '@prisma/client';
+import { join } from 'path';
+import { ProductImageResponse } from 'src/utils/globalTypes';
+import { existsSync, mkdirSync, writeFileSync } from 'fs';
+import * as sharp from 'sharp';
+import { serverError } from 'src/utils/serverErro';
 
 @Injectable()
 export class ProductService {
@@ -79,5 +84,56 @@ export class ProductService {
       data,
       select: this.productSelect,
     });
+  }
+
+  async updateProductImage(
+    productImageDto: ProductImageResponse,
+  ): Promise<Product> {
+    const userUpdated = await this.prisma.product
+      .update({
+        where: { id: productImageDto.id },
+        data: { image: productImageDto.imageUrl },
+      })
+      .catch(serverError);
+    return userUpdated;
+  }
+
+  async insertProductPicture(
+    productId: string,
+    file: Express.Multer.File,
+  ): Promise<ProductImageResponse> {
+    if (!file) {
+      throw new BadRequestException('It is necessary to send a file');
+    }
+    const productOrNull = await this.findById(productId);
+    if (!productOrNull) {
+      throw new BadRequestException(`User with id '${productId}' not found`);
+    }
+
+    const uploadDir = join(
+      __dirname,
+      '..',
+      '..',
+      'uploads',
+      'product-image',
+      productId,
+    );
+    if (!existsSync(uploadDir)) {
+      mkdirSync(uploadDir, { recursive: true });
+    }
+    const fileName = `${Date.now()}-${file.originalname}`;
+    const fileDir = `${uploadDir}/${fileName}`;
+    const fileBuffer = await sharp(file.buffer).resize(400, 400).toBuffer();
+    writeFileSync(fileDir, fileBuffer);
+
+    const productUpdated = await this.updateProductImage({
+      id: productOrNull.id,
+      imageUrl: `/product-image/${productId}/${fileName}`,
+    });
+
+    return {
+      id: productUpdated.id,
+      imageUrl: productUpdated.image,
+    };
   }
 }
