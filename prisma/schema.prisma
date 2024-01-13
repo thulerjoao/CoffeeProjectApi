@@ -39,7 +39,6 @@ model User {
 
 model Cart {
   id         String @id @default(uuid())
-  totalValue Float?
 
   user     User?
   products ProductCart[]

@@ -21,7 +21,6 @@ export class AuthService {
     updatedAt: false,
     cart: {
       select: {
-        totalValue: true,
         products: {
           select: {
             id: true,

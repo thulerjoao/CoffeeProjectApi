@@ -12,7 +12,6 @@ export class CartService {
   private cartSelect = {
     id: true,
     products: true,
-    totalValue: true,
     user: {
       select: {
         id: true,
@@ -72,7 +71,6 @@ export class CartService {
           })),
         },
       },
-      totalValue: dto.totalValue,
     };
     await this.findById(id);
     return this.prisma.cart.update({

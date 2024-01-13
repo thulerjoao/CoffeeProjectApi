@@ -27,7 +27,6 @@ export class UserService {
     updatedAt: false,
     cart: {
       select: {
-        totalValue: true,
         products: {
           select: {
             id: true,
@@ -75,7 +74,7 @@ export class UserService {
       throw new BadRequestException(`Passwords do not march`);
     }
     delete dto.confirmPassword;
-    const newCart = { totalValue: 0 };
+    const newCart = {};
     // const newCart = {};
     const data: Prisma.UserCreateInput = {
       name: dto.name,

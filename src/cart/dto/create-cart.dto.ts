@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsNumber, IsPositive, ValidateNested } from 'class-validator';
+import { ValidateNested } from 'class-validator';
 import { CreateProductCartDto } from 'src/product-cart/dto/create.productCart.dto';
 
 export class CreateCartDto {
@@ -13,12 +13,4 @@ export class CreateCartDto {
     type: [CreateProductCartDto],
   })
   products: CreateProductCartDto[];
-
-  @IsNumber()
-  @IsPositive()
-  @ApiProperty({
-    description: 'Total Price of the cart',
-    example: 0,
-  })
-  totalValue: number;
 }
