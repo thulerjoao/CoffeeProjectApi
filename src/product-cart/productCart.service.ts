@@ -39,6 +39,7 @@ export class ProductCartService {
     const data: Prisma.ProductCartCreateInput = {
       amount: dto.amount,
       size: dto.size,
+      basePrice: dto.basePrice,
       product: {
         connect: {
           id: dto.productId,

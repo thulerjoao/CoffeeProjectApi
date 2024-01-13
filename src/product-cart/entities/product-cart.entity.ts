@@ -5,6 +5,8 @@ export class ProductCart {
   id?: string;
   size: number;
   amount: number;
+  basePrice: number;
+  productId?: string;
   product?: Product;
   cart?: Cart;
   createdAt?: Date;

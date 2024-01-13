@@ -26,6 +26,7 @@ export class AuthService {
           select: {
             id: true,
             size: true,
+            basePrice: true,
             amount: true,
             productId: true,
           },

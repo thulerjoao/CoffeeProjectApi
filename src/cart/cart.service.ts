@@ -18,12 +18,30 @@ export class CartService {
         id: true,
       },
     },
-    createdAt: true,
-    updatedAt: true,
   };
 
   findAll() {
     return this.prisma.cart.findMany();
+  }
+
+  handleTotal = (products) => {
+    const subtototal = products.map((product) => {
+      const amount = product.amount || 0;
+      const value = product.basePrice || 0;
+      return amount * value;
+    });
+    const totalValue = subtototal.reduce((acc, subtotal) => acc + subtotal, 0);
+    return totalValue;
+  };
+
+  async getTotalValue(cartId: string) {
+    const cartItens = await this.findById(cartId);
+    const totalPrice = this.handleTotal(cartItens.products);
+    const response = {
+      totalPrice,
+    };
+    // this.update(cartId, { totalValue: totalPrice });
+    return response;
   }
 
   async findById(id: string): Promise<Cart> {
@@ -49,6 +67,7 @@ export class CartService {
           data: dto.products.map((element) => ({
             size: element.size,
             amount: element.amount,
+            basePrice: element.basePrice,
             productId: element.productId,
           })),
         },
@@ -62,13 +81,3 @@ export class CartService {
     });
   }
 }
-
-// const data: Prisma.CartCreateInput = {
-//   ...dto,
-//   totalValue: 0,
-//   products: {
-//     createMany: {
-//       data:
-//     }
-//   }
-// }

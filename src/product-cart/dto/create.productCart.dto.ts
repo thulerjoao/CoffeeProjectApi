@@ -18,19 +18,19 @@ export class CreateProductCartDto {
   })
   amount: number;
 
+  @IsNumber()
+  @IsNotEmpty()
+  @ApiProperty({
+    description: 'base price',
+    example: 9.9,
+  })
+  basePrice: number;
+
   @IsString()
   @IsNotEmpty()
   @ApiProperty({
     description: 'product id',
-    example: '4b3fbbcf-dc17-4474-89f8-289175dc399a',
+    example: '9835adef-b9b8-4640-809f-00914a1893fb',
   })
   productId: string;
-
-  // @IsString()
-  // @IsNotEmpty()
-  // @ApiProperty({
-  //   description: 'cart id',
-  //   example: 'f358bca8-5b9a-4191-83fe-bbe13b586429',
-  // })
-  // cartId: string;
 }

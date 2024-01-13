@@ -32,6 +32,7 @@ export class UserService {
           select: {
             id: true,
             size: true,
+            basePrice: true,
             amount: true,
             productId: true,
           },

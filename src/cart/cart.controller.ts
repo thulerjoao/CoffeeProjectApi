@@ -11,6 +11,7 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CartService } from './cart.service';
 import { UpdateCartDto } from './dto/update-cart.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { LoggedUser } from 'src/auth/logged-user.decorator';
 
 @ApiTags('cart')
 @UseGuards(AuthGuard())
@@ -19,20 +20,20 @@ import { AuthGuard } from '@nestjs/passport';
 export class CartController {
   constructor(private readonly cartService: CartService) {}
 
-  @Get()
+  @Get('total-value')
   @ApiOperation({
-    summary: 'Get all carts',
+    summary: 'Update and get total value of the cart',
   })
-  getAll() {
-    return this.cartService.findAll();
+  async updateValue(@LoggedUser() user) {
+    return await this.cartService.getTotalValue(user.cartId);
   }
 
-  @Get(':id')
+  @Get()
   @ApiOperation({
     summary: 'Get cart by id',
   })
-  getById(@Param('id') id: string) {
-    return this.cartService.findById(id);
+  getById(@LoggedUser() user) {
+    return this.cartService.findById(user.cartId);
   }
 
   @Delete(':id')
