@@ -45,7 +45,7 @@ export class AuthService {
       throw new UnauthorizedException('User or password invalid');
     }
 
-    const isHashValid = bcrypt.compare(password, user.password);
+    const isHashValid = await bcrypt.compare(password, user.password);
 
     if (!isHashValid) {
       throw new UnauthorizedException('User or password invalid');

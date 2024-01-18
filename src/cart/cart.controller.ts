@@ -1,17 +1,8 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
-  UseGuards,
-} from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { CartService } from './cart.service';
-import { UpdateCartDto } from './dto/update-cart.dto';
+import { Controller, Get, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { LoggedUser } from 'src/auth/logged-user.decorator';
+import { CartService } from './cart.service';
 
 @ApiTags('cart')
 @UseGuards(AuthGuard())
@@ -34,21 +25,5 @@ export class CartController {
   })
   getById(@LoggedUser() user) {
     return this.cartService.findById(user.cartId);
-  }
-
-  @Delete(':id')
-  @ApiOperation({
-    summary: 'Delete cart by id',
-  })
-  delete(@Param('id') id: string) {
-    return this.cartService.delete(id);
-  }
-
-  @Patch(':id')
-  @ApiOperation({
-    summary: 'Updating cart by id',
-  })
-  update(@Param('id') id: string, @Body() dto: UpdateCartDto) {
-    return this.cartService.update(id, dto);
   }
 }
