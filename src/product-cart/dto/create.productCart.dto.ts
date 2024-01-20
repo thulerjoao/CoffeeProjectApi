@@ -30,7 +30,7 @@ export class CreateProductCartDto {
   @IsNotEmpty()
   @ApiProperty({
     description: 'product id',
-    example: '9835adef-b9b8-4640-809f-00914a1893fb',
+    example: 'd4badc84-3258-4318-9ff1-5fc057d2f8a9',
   })
   productId: string;
 }

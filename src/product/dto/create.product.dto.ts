@@ -29,7 +29,7 @@ export class CreateProductDto {
   @IsString()
   @ApiProperty({
     description: 'Type',
-    example: '79628d63-7c76-4545-95e2-a551bd43ea40',
+    example: '32fba213-f489-41f6-8287-ef9faebc9569',
   })
   typeId: string;
 

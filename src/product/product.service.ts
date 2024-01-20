@@ -79,6 +79,7 @@ export class ProductService {
         },
       },
     };
+    console.log(data);
     return this.prisma.product.update({
       where: { id },
       data,
